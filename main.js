@@ -1,37 +1,3 @@
-/*
-window.addEventListener("DOMContentLoaded", init);
-
-function init() {
-    const renderer = new THREE.WebGLRenderer({
-        canvas: document.querySelector("#bg"),
-    });
-    
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.position.setZ(30);
-    
-    const scene = new THREE.Scene();
-    //scene.background = new THREE.Color(0xaaaaaa);
-
-    const point = new THREE.PointLight(0xffffff);
-    point.position.set(5, 5, 5);
-
-    const ambient = new THREE.AmbientLight(0xffffff);
-    scene.add(ambient, point);
-
-    const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-    const material = new THREE.MeshStandardMaterial({color: 0xff6367});
-    const torus = new THREE.Mesh(geometry, material);
-    scene.add(torus);
-
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.update();
-    renderer.render(scene, camera);
-};
-
-*/
-
 window.addEventListener("DOMContentLoaded", init);
 function init() {
     const scene = new THREE.Scene();
@@ -50,7 +16,7 @@ function init() {
     //scene.add(torus);
     
     const loader = new THREE.GLTFLoader();
-    const url = "sample.glb";
+    const url = "./katana.glb";
     let model = null;
     loader.load(
         url,
