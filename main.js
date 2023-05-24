@@ -8,13 +8,9 @@ function init() {
     });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.position.setZ(30);
-    renderer.render(scene, camera);
-    
-    const generator = new THREE.PMREMGenerator(renderer);
-    const envMap = generator.fromScene(scene, 0, 0.1, 1300);
-    scene.environment = envMap.texture;
-    generator.dispose();
+    camera.position.set(10, 30, -5);
+    camera.lookAt({x: 0, y: 0, z: 0});
+    scene.background = new THREE.Color(0xaaaaaa);
     
     const loader = new THREE.GLTFLoader();
     const url = "./katana.glb";
@@ -23,7 +19,7 @@ function init() {
         url,
         function(gltf) {
             model = gltf.scene;
-            model.scale.set(5.0, 5.0, 5.0);
+            model.scale.set(10, 10, 10);
             model.position.set(0, 0, 0);
             scene.add(gltf.scene);
         }
@@ -37,17 +33,19 @@ function init() {
     });
     
     const pointLight = new THREE.PointLight(0xffffff);
-    pointLight.position.set(20, 20, 20);
+    pointLight.position.set(30, 30, 30);
     const ambientLight = new THREE.AmbientLight(0xffffff);
     scene.add(pointLight, ambientLight);
     
-    const gridHelper = new THREE.GridHelper(200, 50);
-    scene.add(gridHelper);
+    //const gridHelper = new THREE.GridHelper(200, 50);
+    //scene.add(gridHelper);
     
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     
     function animate() {
         requestAnimationFrame(animate);
+        model.rotation.y += 0.01;
+        model.rotation.z += 0.01;
         controls.update();
         renderer.render(scene, camera);
     }
