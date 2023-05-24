@@ -1,4 +1,5 @@
 window.addEventListener("DOMContentLoaded", init);
+
 function init() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -6,14 +7,14 @@ function init() {
         canvas: document.querySelector("#bg"),
     });
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setSize(window.innerWidth, window.innerHeight);
     camera.position.setZ(30);
     renderer.render(scene, camera);
     
-    const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-    const material = new THREE.MeshStandardMaterial({color: 0xff6347});
-    const torus = new THREE.Mesh(geometry, material);
-    //scene.add(torus);
+    const generator = new THREE.PMREMGenerator(renderer);
+    const envMap = generator.fromScene(scene, 0, 0.1, 1300);
+    scene.environment = envMap.texture;
+    generator.dispose();
     
     const loader = new THREE.GLTFLoader();
     const url = "./katana.glb";
@@ -28,6 +29,13 @@ function init() {
         }
     );
     
+    const env_loader = new THREE.RGBELoader();
+    env_loader.load("./environment_sky2.hdr", function(texture){
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        texture.rotation = 180;
+        scene.environment = texture;
+    });
+    
     const pointLight = new THREE.PointLight(0xffffff);
     pointLight.position.set(20, 20, 20);
     const ambientLight = new THREE.AmbientLight(0xffffff);
@@ -40,9 +48,6 @@ function init() {
     
     function animate() {
         requestAnimationFrame(animate);
-        torus.rotation.x += 0.01
-        torus.rotation.y += 0.005
-        torus.rotation.z += 0.01
         controls.update();
         renderer.render(scene, camera);
     }
